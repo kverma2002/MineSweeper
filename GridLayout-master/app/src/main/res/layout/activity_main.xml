@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <!-- Timer TextView -->
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Timer: 0s"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp"
+        android:textColor="#000000"/>
+
+    <!-- Mine Counter TextView -->
+    <TextView
+        android:id="@+id/mineCounterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mines: 0"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/timerTextView"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp"
+        android:textColor="#000000"/>
+
+    <!-- New Game Button -->
+    <Button
+        android:id="@+id/newGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="#0077CC"
+        android:text="New Game"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <!-- Game Board (GridLayout) -->
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gameBoardGridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/mineCounterTextView"
+        android:layout_above="@+id/newGameButton"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:rowCount="8"
+        app:columnCount="8">
+
+        <Button
+            android:id="@+id/cellButton00"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:text=""
+            android:textSize="10sp"
+            android:textColor="#000000"
+            android:background="#FFFFFF"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            />
+
+    </androidx.gridlayout.widget.GridLayout>
+
+</RelativeLayout>
