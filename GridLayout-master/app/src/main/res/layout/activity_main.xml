@@ -49,17 +49,17 @@
 
 
     <!-- New Game Button -->
-    <Button
-        android:id="@+id/newGameButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="#0077CC"
-        android:text="New Game"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:onClick="startNewGame"/>
+<!--    <Button-->
+<!--        android:id="@+id/newGameButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:background="#0077CC"-->
+<!--        android:text="New Game"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="12sp"-->
+<!--        android:onClick="startNewGame"/>-->
 
     <!-- Game Board (GridLayout) -->
     <androidx.gridlayout.widget.GridLayout
@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_above="@+id/newGameButton"
+        android:layout_above="@id/actionPicker"
         android:layout_marginBottom="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginStart="4dp"
@@ -75,6 +75,42 @@
         app:rowCount="12"
         app:columnCount="10">
     </androidx.gridlayout.widget.GridLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:id="@+id/actionPicker"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" android:weightSum="1"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/actionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Mine"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_weight=".50"
+            />
+
+        <ImageView
+            android:id="@+id/mineOrFlagView"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            app:srcCompat="@drawable/pickaxe"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_weight=".50"
+            />
+
+
+    </LinearLayout>
+
+
+
+    
 
 
     <!--    <androidx.gridlayout.widget.GridLayout-->

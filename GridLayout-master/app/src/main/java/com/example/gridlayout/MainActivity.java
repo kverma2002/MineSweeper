@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,11 +19,13 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private MinesweeperBoard minesweeperBoard;
     private TextView flagCounterTextView;
-    private Button newGameButton;
+    private Button mineOrFlag;
+    private ImageView imgMineOrFlag;
     private boolean gameInProgress;
     private Handler timerHandler;
     private Runnable timerRunnable;
     private int secondsElapsed;
+    private boolean mining;
 
     private int clock = 0;
     private boolean running = false;
@@ -46,13 +49,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         cell_tvs = new ArrayList<TextView>();
 
         // Link UI elements to Java variables
         minesweeperBoard = new MinesweeperBoard(ROW_COUNT, COLUMN_COUNT, MINE_COUNT); // Example board size and mine count
         flagCounterTextView = findViewById(R.id.flagCounterTextView);
-        newGameButton = findViewById(R.id.newGameButton);
+        mineOrFlag = findViewById(R.id.actionButton);
+        mineOrFlag.setOnClickListener(this::onClickMineOrFlag);
+        imgMineOrFlag = findViewById(R.id.mineOrFlagView);
         gameInProgress = false;
+        mining = true;
 
         GridLayout grid = (GridLayout) findViewById(R.id.gridLayout01);
         for (int i = 0; i < ROW_COUNT; i++) {
@@ -74,13 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
                 grid.addView(tv, lp);
                 cell_tvs.add(tv);
-
             }
         }
-
         startTimer();
-
-//        updateUI();
     }
 
     private int findIndexOfCellTextView(TextView tv) {
@@ -89,6 +92,21 @@ public class MainActivity extends AppCompatActivity {
                 return n;
         }
         return -1;
+    }
+
+    public void onClickMineOrFlag(View view) {
+        if (mining) {
+            imgMineOrFlag.setImageResource(R.drawable.flag);
+            mineOrFlag.setText("Flag");
+            mining = false;
+        }
+        else {
+            imgMineOrFlag.setImageResource(R.drawable.pickaxe);
+            mineOrFlag.setText("Mine");
+            mining = true;
+
+        }
+
     }
 
     public void onClickTV(View view){
