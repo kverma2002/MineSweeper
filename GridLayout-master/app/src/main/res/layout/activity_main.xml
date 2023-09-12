@@ -26,10 +26,10 @@
             />
 
         <TextView
-            android:id="@+id/mineCounterTextView"
+            android:id="@+id/flagCounterTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mines: 0"
+            android:text="Flags: 0"
             android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="12dp"
@@ -58,7 +58,8 @@
         android:background="#0077CC"
         android:text="New Game"
         android:textColor="#FFFFFF"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:onClick="startNewGame"/>
 
     <!-- Game Board (GridLayout) -->
     <androidx.gridlayout.widget.GridLayout
@@ -66,7 +67,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_below="@id/mineCounterTextView"
         android:layout_above="@+id/newGameButton"
         android:layout_marginBottom="32dp"
         android:layout_marginTop="32dp"

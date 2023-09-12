@@ -17,19 +17,22 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private MinesweeperBoard minesweeperBoard;
-    private TextView timerTextView;
-    private TextView mineCounterTextView;
+    private TextView flagCounterTextView;
     private Button newGameButton;
     private boolean gameInProgress;
     private Handler timerHandler;
     private Runnable timerRunnable;
     private int secondsElapsed;
 
+    private int clock = 0;
+    private boolean running = false;
+
+
 
     // CAN CHANGE VALUES BASED ON GAME RESTRAINTS
     private static final int COLUMN_COUNT = 10;
     private static final int ROW_COUNT = 12;
-    private static final int MINE_COUNT = 12;
+    private static final int MINE_COUNT = 4;
 
     // HOLD UI COMPONENTS
     private ArrayList<TextView> cell_tvs;
@@ -47,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Link UI elements to Java variables
         minesweeperBoard = new MinesweeperBoard(ROW_COUNT, COLUMN_COUNT, MINE_COUNT); // Example board size and mine count
-        timerTextView = findViewById(R.id.timerTextView);
-        mineCounterTextView = findViewById(R.id.mineCounterTextView);
+        flagCounterTextView = findViewById(R.id.flagCounterTextView);
         newGameButton = findViewById(R.id.newGameButton);
         gameInProgress = false;
 
@@ -56,24 +58,27 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < ROW_COUNT; i++) {
             for (int j=0; j < COLUMN_COUNT; j++) {
                 TextView tv = new TextView(this);
-                tv.setHeight( dpToPixel(30) );
-                tv.setWidth( dpToPixel(30) );
-                tv.setTextSize( 10 );//dpToPixel(32) );
+                tv.setHeight(dpToPixel(30));
+                tv.setWidth(dpToPixel(30));
+                tv.setTextSize(10);//dpToPixel(32) );
                 tv.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
-                tv.setTextColor(Color.GRAY);
+                tv.setTextColor(Color.BLACK);
                 tv.setBackgroundColor(Color.GRAY);
+                String s = String.valueOf(minesweeperBoard.getCellValue(i,j));
+                tv.setText(s);
                 tv.setOnClickListener(this::onClickTV);
-
                 GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
                 lp.setMargins(dpToPixel(2), dpToPixel(2), dpToPixel(2), dpToPixel(2));
                 lp.rowSpec = GridLayout.spec(i);
                 lp.columnSpec = GridLayout.spec(j);
 
                 grid.addView(tv, lp);
-
                 cell_tvs.add(tv);
+
             }
         }
+
+        startTimer();
 
 //        updateUI();
     }
@@ -91,7 +96,11 @@ public class MainActivity extends AppCompatActivity {
         int n = findIndexOfCellTextView(tv);
         int i = n/COLUMN_COUNT;
         int j = n%COLUMN_COUNT;
-        tv.setText(String.valueOf(i)+String.valueOf(j));
+
+        minesweeperBoard.revealCell(i, j);
+        if (minesweeperBoard.isGameOver()) {
+            gameOver();
+        }
         if (tv.getCurrentTextColor() == Color.GRAY) {
             tv.setTextColor(Color.GREEN);
             tv.setBackgroundColor(Color.parseColor("lime"));
@@ -101,18 +110,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void gameOver() {
 
 
-//    // Start a new game or reset the game state
-//    private void startNewGame() {
-//        minesweeperBoard = new MinesweeperBoard(8, 8, 10);
-//        secondsElapsed = 0;
-//        gameInProgress = true;
-//        updateUI();
-//
-//        // Start the timer
-////        startTimer();
-//    }
+    }
+
+
+    // Start a new game or reset the game state
+    public void startNewGame(View view) {
+        minesweeperBoard = new MinesweeperBoard(ROW_COUNT, COLUMN_COUNT, MINE_COUNT);
+        secondsElapsed = 0;
+        gameInProgress = true;
+        updateUI();
+
+        // Start the timer
+        clock = 0;
+    }
 
 //    // Handle cell click based on game state
 //    private void handleCellClick(int row, int col) {
@@ -130,36 +143,41 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
-    // Update the UI elements based on the game state
-//    private void updateUI() {
-//        // Update cell buttons (reveal or flag cells)
-//        for (int i = 0; i < minesweeperBoard.getRows(); i++) {
-//            for (int j = 0; j < minesweeperBoard.getCols(); j++) {
-//                if (minesweeperBoard.isCellRevealed(i, j)) {
-//                    cellButtons[i][j].setText(String.valueOf(minesweeperBoard.getCellValue(i, j)));
-//                } else {
-//                    // Customize button appearance for unrevealed cells
-//                }
-//            }
-//        }
-//        // Update timer and mine counter
-//        timerTextView.setText(String.format(getString(R.string.timer_format), secondsElapsed));
-//        mineCounterTextView.setText(String.format(getString(R.string.mine_counter_format), minesweeperBoard.getMinesRemaining()));
-//    }
+//     Update the UI elements based on the game state
+    private void updateUI() {
+        // Update cell buttons (reveal or flag cells)
+        for (int n=0; n<cell_tvs.size(); n++) {
+            int i = n/COLUMN_COUNT;
+            int j = n%COLUMN_COUNT;
+            String s = String.valueOf(minesweeperBoard.getCellValue(i,j));
+            cell_tvs.get(n).setText(s);
+            cell_tvs.get(n).setTextColor(Color.BLACK);
+            cell_tvs.get(n).setBackgroundColor(Color.GRAY);
+        }
+    }
 
-    // Start the timer
-//    private void startTimer() {
-//        timerHandler = new Handler();
-//        timerRunnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                secondsElapsed++;
-//                timerTextView.setText(String.format(getString(R.string.timer_format), secondsElapsed));
-//                timerHandler.postDelayed(this, 1000);
-//            }
-//        };
-//        timerHandler.postDelayed(timerRunnable, 1000);
-//    }
+//     Start the timer
+    private void startTimer() {
+        final TextView timeView = (TextView) findViewById(R.id.timerTextView);
+        final Handler handler = new Handler();
+        running = true;
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                int hours =clock/3600;
+                int minutes = (clock%3600) / 60;
+                int seconds = clock%60;
+                String time = String.format("%d:%02d:%02d", hours, minutes, seconds);
+                timeView.setText("Timer" + time);
+
+                if (running) {
+                    clock++;
+                }
+                handler.postDelayed(this, 1000);
+            }
+        });
+
+    }
 
     @Override
     protected void onDestroy() {
