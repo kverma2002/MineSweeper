@@ -70,14 +70,16 @@ public class MinesweeperBoard {
     - IF flagged set to not flagged
     - If not flagged set ot flagged
     */
-    public void flagCell(int row, int col) {
+    public int flagCell(int row, int col) {
         if (!board[row][col].isCanClick()) {
-            return ;
+            return -1;
         }
         if (!board[row][col].isFlagged()) {
             board[row][col].setFlagged(true);
+            return 1;
         } else {
             board[row][col].setFlagged(false);
+            return 0;
         }
     }
 
@@ -125,5 +127,9 @@ public class MinesweeperBoard {
 
     public int getCols() {
         return cols;
+    }
+
+    public boolean isCellFlagged(int i, int j) {
+        return board[i][j].isFlagged();
     }
 }

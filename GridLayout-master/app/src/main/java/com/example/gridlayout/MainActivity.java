@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int COLUMN_COUNT = 10;
     private static final int ROW_COUNT = 12;
     private static final int MINE_COUNT = 4;
+    private int FLAG_COUNT = 4;
 
     // HOLD UI COMPONENTS
     private ArrayList<TextView> cell_tvs;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // Link UI elements to Java variables
         minesweeperBoard = new MinesweeperBoard(ROW_COUNT, COLUMN_COUNT, MINE_COUNT); // Example board size and mine count
         flagCounterTextView = findViewById(R.id.flagCounterTextView);
+        flagCounterTextView.setText("Flags: " + FLAG_COUNT );
         mineOrFlag = findViewById(R.id.actionButton);
         mineOrFlag.setOnClickListener(this::onClickMineOrFlag);
         imgMineOrFlag = findViewById(R.id.mineOrFlagView);
@@ -115,18 +117,33 @@ public class MainActivity extends AppCompatActivity {
         int i = n/COLUMN_COUNT;
         int j = n%COLUMN_COUNT;
 
-        minesweeperBoard.revealCell(i, j);
-        if (minesweeperBoard.isGameOver()) {
-            gameOver();
+        if(mining) {
+            miningClick(i, j, tv);
         }
-        if (tv.getCurrentTextColor() == Color.GRAY) {
-            tv.setTextColor(Color.GREEN);
-            tv.setBackgroundColor(Color.parseColor("lime"));
-        }else {
-            tv.setTextColor(Color.GRAY);
-            tv.setBackgroundColor(Color.LTGRAY);
+        else {
+            flagClick(i,j, tv);
         }
     }
+
+    private void flagClick(int i, int j, TextView tv) {
+        int x = minesweeperBoard.flagCell(i,j);
+        if ( x == 1) {
+            tv.setText(R.string.flag);
+            FLAG_COUNT -= 1;
+            flagCounterTextView.setText("Flags: " + FLAG_COUNT);
+        }
+        else if ( x== 0) {
+            FLAG_COUNT += 1;
+            flagCounterTextView.setText("Flags: " + FLAG_COUNT);
+            tv.setText("");
+        }
+
+    }
+
+    private void miningClick(int i, int j, TextView tv) {
+
+    }
+
 
     private void gameOver() {
 
