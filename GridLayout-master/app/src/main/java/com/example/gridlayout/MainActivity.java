@@ -1,5 +1,6 @@
 package com.example.gridlayout;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
     private int clock = 0;
     private boolean running = false;
+
+    public static final String EXTRA_TEXT = "com.example.application.example.EXTRA_TEXT";
+    public static final String EXTRA_NUMBER = "com.example.application.example.EXTRA_NUMBER";
 
 
 
@@ -144,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
     private void miningClick(int i, int j, TextView tv, int n) {
         int x = minesweeperBoard.revealCell(i,j);
         if ( x == -1) {
-            gameOver();
+            gameOver("YOU LOSE!!!");
         }
         else if (x == 1) {
             tv.setBackgroundColor(Color.GRAY);
@@ -153,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
                 tv.setText(String.valueOf(y));
             }
             updateBoard();
+            if(minesweeperBoard.isGameWon()) {
+                gameOver("YOUWIN");
+            }
         }
 
     }
@@ -175,8 +182,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void gameOver() {
-        System.out.println("Game Joerver");
+    private void gameOver(String s) {
+        System.out.println(s);
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra(EXTRA_TEXT, s);
+        String x = String.valueOf(clock);
+        intent.putExtra(EXTRA_NUMBER, x);
+        startActivity(intent);
     }
 
 

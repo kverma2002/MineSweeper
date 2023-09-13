@@ -8,6 +8,7 @@ public class MinesweeperBoard {
     private Tile[][] board; // Represents the game board
     private boolean[][] revealed; // Keeps track of which cells are revealed
     private boolean gameOver;
+    private boolean gameWon;
 
     public MinesweeperBoard(int rows, int cols, int numMines) {
         this.rows = rows;
@@ -16,6 +17,7 @@ public class MinesweeperBoard {
         this.board = new Tile[rows][cols];
         this.revealed = new boolean[rows][cols];
         this.gameOver = false;
+        this.gameWon = false;
         generateBoard();
     }
 
@@ -113,8 +115,24 @@ public class MinesweeperBoard {
         }
     }
 
+    public boolean isGameWon() {
+        return gameWon;
+    }
+
     private void checkWin() {
-        
+        int count = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (board[i][j].isCovered()) {
+                    count += 1;
+                }
+            }
+        }
+        if (count <= numMines) {
+            gameWon = true;
+            gameOver=true;
+        }
+
     }
 
     public boolean isGameOver() {
