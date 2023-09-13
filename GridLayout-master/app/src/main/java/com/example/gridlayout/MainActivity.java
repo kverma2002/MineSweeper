@@ -169,6 +169,10 @@ public class MainActivity extends AppCompatActivity {
             int x = i/COLUMN_COUNT;
             int y = i%COLUMN_COUNT;
             if (!minesweeperBoard.isCellRevealed(x, y)) {
+                if (minesweeperBoard.isCellFlagged(x,y)) {
+                    cell_tvs.get(i).setText("");
+                    FLAG_COUNT += 1;
+                }
                 cell_tvs.get(i).setBackgroundColor(Color.GRAY);
                 int z = minesweeperBoard.getCellValue(x,y);
                 if (z != 0) {
@@ -176,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        flagCounterTextView.setText("Flags: " + FLAG_COUNT);
 
 
     }
