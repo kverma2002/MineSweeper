@@ -14,6 +14,7 @@ import androidx.gridlayout.widget.GridLayout;
 
 import com.example.gridlayout.MinesweeperBoard;
 
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -69,12 +70,12 @@ public class MainActivity extends AppCompatActivity {
                 TextView tv = new TextView(this);
                 tv.setHeight(dpToPixel(30));
                 tv.setWidth(dpToPixel(30));
-                tv.setTextSize(10);//dpToPixel(32) );
+                tv.setTextSize(20);//dpToPixel(32) );
                 tv.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
                 tv.setTextColor(Color.BLACK);
-                tv.setBackgroundColor(Color.GRAY);
+                tv.setBackgroundColor(Color.GREEN);
                 String s = String.valueOf(minesweeperBoard.getCellValue(i,j));
-                tv.setText(s);
+                //tv.setText(s);
                 tv.setOnClickListener(this::onClickTV);
                 GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
                 lp.setMargins(dpToPixel(2), dpToPixel(2), dpToPixel(2), dpToPixel(2));
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         int j = n%COLUMN_COUNT;
 
         if(mining) {
-            miningClick(i, j, tv);
+            miningClick(i, j, tv, n);
         }
         else {
             flagClick(i,j, tv);
@@ -140,14 +141,42 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void miningClick(int i, int j, TextView tv) {
+    private void miningClick(int i, int j, TextView tv, int n) {
+        int x = minesweeperBoard.revealCell(i,j);
+        if ( x == -1) {
+            gameOver();
+        }
+        else if (x == 1) {
+            tv.setBackgroundColor(Color.GRAY);
+            int y = minesweeperBoard.getCellValue(i,j);
+            if ( y != 0) {
+                tv.setText(String.valueOf(y));
+            }
+            updateBoard();
+        }
+
+    }
+
+    private void updateBoard () {
+        for (int i = 0; i < cell_tvs.size(); i++) {
+            int x = i/COLUMN_COUNT;
+            int y = i%COLUMN_COUNT;
+            if (!minesweeperBoard.isCellRevealed(x, y)) {
+                cell_tvs.get(i).setBackgroundColor(Color.GRAY);
+                int z = minesweeperBoard.getCellValue(x,y);
+                if (z != 0) {
+                    cell_tvs.get(i).setText(String.valueOf(z));
+                }
+            }
+        }
+
 
     }
 
 
+
     private void gameOver() {
-
-
+        System.out.println("Game Joerver");
     }
 
 
@@ -162,23 +191,8 @@ public class MainActivity extends AppCompatActivity {
         clock = 0;
     }
 
-//    // Handle cell click based on game state
-//    private void handleCellClick(int row, int col) {
-//        if (!minesweeperBoard.isCellRevealed(row, col)) {
-//            minesweeperBoard.revealCell(row, col);
-//
-//            if (minesweeperBoard.isGameOver()) {
-//                // Handle game over
-//                gameInProgress = false;
-//                // Show game over message or dialog
-//            } else {
-//                // Continue the game
-//                updateUI();
-//            }
-//        }
-//    }
 
-//     Update the UI elements based on the game state
+
     private void updateUI() {
         // Update cell buttons (reveal or flag cells)
         for (int n=0; n<cell_tvs.size(); n++) {

@@ -83,17 +83,19 @@ public class MinesweeperBoard {
         }
     }
 
-    public void revealCell(int row, int col) {
-        if (gameOver || board[row][col].isCanClick()) {
-            return;
+    public int revealCell(int row, int col) {
+        if (gameOver || !board[row][col].isCanClick()) {
+            return 0;
         }
         board[row][col].setCanClick(false);
 
         if (board[row][col].isMine()) {
             // Game over: the player has hit a mine
             gameOver = true;
+            return -1;
         } else {
             board[row][col].setCovered(false);
+
             if (board[row][col].getSurrondingMines() == 0) {
                 for (int i = row - 1; i <= row + 1; i++) {
                     for (int j = col - 1; j <= col + 1; j++) {
@@ -103,9 +105,16 @@ public class MinesweeperBoard {
                     }
                 }
             }
+
+            checkWin();
+            return 1;
             // If the cell is empty, recursively reveal adjacent cells
 
         }
+    }
+
+    private void checkWin() {
+        
     }
 
     public boolean isGameOver() {
