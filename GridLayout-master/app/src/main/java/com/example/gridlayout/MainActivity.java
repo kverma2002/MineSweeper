@@ -190,10 +190,44 @@ public class MainActivity extends AppCompatActivity {
     private void gameOver(String s) {
         System.out.println(s);
         Intent intent = new Intent(this, SecondActivity.class);
-        intent.putExtra(EXTRA_TEXT, s);
-        String x = String.valueOf(clock);
-        intent.putExtra(EXTRA_NUMBER, x);
-        startActivity(intent);
+        running = false;
+        if(!minesweeperBoard.isGameWon()) {
+            for (int i = 0; i < cell_tvs.size(); i++) {
+                int x = i / COLUMN_COUNT;
+                int y = i % COLUMN_COUNT;
+                cell_tvs.get(i).setBackgroundColor(Color.GRAY);
+                if (minesweeperBoard.isCellFlagged(x, y)) {
+                    cell_tvs.get(i).setText("");
+                    FLAG_COUNT += 1;
+                }
+                if (minesweeperBoard.isMine(x, y)) {
+                    cell_tvs.get(i).setText(R.string.mine);
+                }
+
+                int z = minesweeperBoard.getCellValue(x, y);
+                if (z != -1) {
+                    cell_tvs.get(i).setText(String.valueOf(z));
+                }
+            }
+            int g = clock;
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // yourMethod();
+                    intent.putExtra(EXTRA_TEXT, s);
+                    String x = String.valueOf(g);
+                    intent.putExtra(EXTRA_NUMBER, x);
+                    startActivity(intent);
+                }
+            }, 5000);
+        }
+        else {
+            intent.putExtra(EXTRA_TEXT, s);
+            String x = String.valueOf(clock);
+            intent.putExtra(EXTRA_NUMBER, x);
+            startActivity(intent);
+        }
+
     }
 
 

@@ -161,6 +161,7 @@ public class MinesweeperBoard {
         return gameOver;
     }
 
+
     public boolean isCellRevealed(int row, int col) {
         return board[row][col].isCovered();
     }
@@ -169,6 +170,8 @@ public class MinesweeperBoard {
         if (board[row][col].isMine()) { return -1;}
         else {return board[row][col].getSurrondingMines(); }
     }
+
+    public boolean isMine(int i, int j) {return board[i][j].isMine();}
 
     public int getRows() {
         return rows;
